@@ -24,8 +24,7 @@ if len(sys.argv) > 1 :
 else :
     username = sys.argv[0]
 
-token = util.prompt_for_user_token(username, scope, client_secret='84fea3c48dc74976bb683ec81a9b9236',
-                                   client_id='0902803f3ac24a998e14d0ee5c8d622a',
+token = util.prompt_for_user_token(username, scope,
                                    redirect_uri='https://example.com/callback/')
 
 if token :
