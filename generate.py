@@ -22,6 +22,8 @@ else :
 
 # create token
 token = util.prompt_for_user_token(username, scope,
+                                   client_id='0902803f3ac24a998e14d0ee5c8d622a',
+                                   client_secret='84fea3c48dc74976bb683ec81a9b9236',
                                    redirect_uri='https://example.com/callback/')
 if token :
     sp = spotipy.Spotify(auth=token)
@@ -36,8 +38,16 @@ if token :
     print('\nWhat do you want to name your playlist? ', end='')
     name = input().strip()
 
-    song_list = sp.search(artist + ' ' + song_name, limit=None, type='track')
-    track_id = song_list['tracks']['items'][0]['id']
+    try :
+        song_list = sp.search(artist + ' ' + song_name, limit=None, type='track')
+        track_id = song_list['tracks']['items'][0]['id']
+    except IndexError :
+        # if spotify can't find the song in the searchf
+        print('Unable to find a song by that name. Try entering just an artist or specific genre: ', end='')
+        alt_name = input().strip()
+        song_list = sp.search(alt_name, limit=None)
+        track_id = song_list['tracks']['items'][0]['id']
+
     id_list = []
 
     # use spotipy's recommendations() function to get a list of related song id's
@@ -48,6 +58,7 @@ if token :
     print(recommendations)
     for track in recommendations :
         id_list.append(track['id'])
+
     print(id_list)
 
     # create the playlist for the user
